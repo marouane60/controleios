@@ -14,6 +14,7 @@ import CoreData
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
 
+    @IBOutlet weak var tableView: UITableView!
     var villes = [Ville]()
     
     let leContexte = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -73,6 +74,30 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
 
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        if buttonIndex == 1 {
+            let nouvelleVille = Ville(context: leContexte)
+            
+            nouvelleVille.nom = alertView.textField(at:0)!.text;
+            nouvelleVille.population = 4000000
+            
+            do {
+                try leContexte.save()
+            } catch {
+                print("Problème de sauvegarde : \(error)")
+            }
+            
+            tableView.reloadData();
+        }
+    }
+    
+    @IBAction func onAdd(_ sender: Any) {
+        var alert = UIAlertView(title: "Enter city name", message: nil, delegate: self, cancelButtonTitle: "Cancel");
+        
+        alert.addButton(withTitle:"Done");
+        alert.alertViewStyle = .plainTextInput;
+        alert.show();
+    }
     // MARK: Fonctions utilitaires
     
     // Fonction qui retourne une chaine où le nombre est formatté. Ici des espaces qui séparent les milliers

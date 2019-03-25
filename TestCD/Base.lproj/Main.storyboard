@@ -61,8 +61,14 @@
                         <barButtonItem key="backBarButtonItem" title="Retour" id="58g-YX-aiO"/>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="oMR-2q-1fa">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="onAdd:" destination="BYZ-38-t0r" id="Cos-O6-5ax"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="tableView" destination="ikf-sK-1gv" id="bgr-Jy-bv8"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
