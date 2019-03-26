@@ -11,7 +11,7 @@
 import UIKit
 import CoreData
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate {
     
 
     @IBOutlet weak var tableView: UITableView!
@@ -19,7 +19,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     let leContexte = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    
+    //1. Create the alert controller.
+    let alert = UIAlertController(title: "Entrez les données de la ville svp", message: "", preferredStyle: .alert)
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -37,6 +39,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 print("Problème de sauvegarde : \(error)")
             }
         */
+        
+        alert.addTextField { (textField) in
+            textField.text = "Nom"
+        }
+        
+        alert.addTextField { (textField) in
+            textField.text = "Population"
+        }
         
         loadData()
     }
@@ -74,11 +84,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
 
-    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+    /*{
         if buttonIndex == 1 {
             let nouvelleVille = Ville(context: leContexte)
             
-            nouvelleVille.nom = alertView.textField(at:0)!.text;
+            nouvelleVille.nom = alertView.textField(at:0)?.text;
+            print("test");
             nouvelleVille.population = 4000000
             
             do {
@@ -89,14 +100,30 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             
             tableView.reloadData();
         }
-    }
+    }*/
     
     @IBAction func onAdd(_ sender: Any) {
-        var alert = UIAlertView(title: "Enter city name", message: nil, delegate: self, cancelButtonTitle: "Cancel");
         
-        alert.addButton(withTitle:"Done");
-        alert.alertViewStyle = .plainTextInput;
-        alert.show();
+        let nouvelleVille = Ville(context: leContexte)
+        
+        // 3. Grab the value from the text field, and print it when the user clicks OK.
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
+            let textField = alert!.textFields![0] // Force unwrapping because we know it exists.
+            
+            nouvelleVille.nom = textField.text!
+            nouvelleVille.population = 4000000
+            
+            print(nouvelleVille.nom)
+            do {
+                try self.leContexte.save()
+            } catch {
+                print("Problème de sauvegarde : \(error)")
+            }
+            
+        }))
+        // 4. Present the alert.
+        self.present(alert, animated: true, completion: nil)
+        self.tableView.reloadData();
     }
     // MARK: Fonctions utilitaires
     
