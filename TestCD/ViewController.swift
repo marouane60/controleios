@@ -116,6 +116,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             print(nouvelleVille.nom)
             do {
                 try self.leContexte.save()
+                self.villes.removeAll()
+                self.loadData()
+                self.tableView.reloadData()
             } catch {
                 print("Problème de sauvegarde : \(error)")
             }
